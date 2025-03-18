@@ -13,3 +13,36 @@ sudo docker run --detach \
   --volume /srv/gitlab/data:/var/opt/gitlab \
   gitlab/gitlab-ce:16.9.6-ce.0
 ```
+
+
+Criação do Grupo
+
+a. Criar um grupo chamado "DevOps Team", por meio de linha de comando.
+
+Copy
+curl --request POST --header "PRIVATE-TOKEN: <<your_access_token>>" --data "name=DevOps Team&path=devops-team" "http://192.168.98.10/api/v4/groups"
+Substitua <<your_access_token>> pelo seu token de acesso pessoal do seu GitLab.
+
+Criação de Usuários de Exemplo
+
+a. Criar três usuários de exemplo.
+
+curl --request POST --header "PRIVATE-TOKEN: <<your_access_token>>" --data "email=user1@example.com&password=securepassword&username=user1&name=User1" "http://192.168.98.10/api/v4/users"
+
+curl --request POST --header "PRIVATE-TOKEN: <<your_access_token>>" --data "email=user2@example.com&password=securepassword&username=user2&name=User2" "http://192.168.98.10/api/v4/users"
+
+curl --request POST --header "PRIVATE-TOKEN: <<your_access_token>>" --data "email=user3@example.com&password=securepassword&username=user3&name=User3" "http://192.168.98.10/api/v4/users"
+
+Adição de Usuários ao Grupo
+
+a. Primeiro, você precisa obter os IDs dos usuários que criou. Execute o seguinte comando para obter o ID do usuário "user1":
+
+curl --request GET --header "PRIVATE-TOKEN: <<your_access_token>>" "http://192.168.98.10/api/v4/users?username=user1"
+Anote o ID do usuário retornado.
+
+b. Execute o seguinte comando para adicionar o usuário ao grupo "DevOps Team":
+
+curl --request POST --header "PRIVATE-TOKEN: <<your_access_token>>" --data "user_id=<user_id>&access_level=30" "http://192.168.98.10/api/v4/groups/devops-team/members"
+Substitua <user_id> pelo ID do usuário que você anotou.
+
+c. Repita os passos (a) e (b) para adicionar "user2" e "user3" ao grupo.
